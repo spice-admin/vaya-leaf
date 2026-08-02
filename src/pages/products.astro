@@ -1,0 +1,364 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="page-header light-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <!-- Page Header Box Start -->
+          <div class="page-header-box">
+            <h1 class="text-anime-style-3" data-cursor="-opaque">
+              Our Products
+            </h1>
+          </div>
+          <!-- Page Header Box End -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-products">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3 col-lg-4">
+          <!-- Page Single Sidebar Start -->
+          <div class="page-single-sidebar">
+            <!-- Page Category Filter Header Start -->
+            <div class="product-category-filter-header wow fadeInUp">
+              <div class="product-category-filter-title">
+                <img src="/images/icon-filter.svg" alt="" />
+                <h2>Filter By</h2>
+              </div>
+              <div class="product-category-filter-clear-btn">
+                <a href="#">Clear All</a>
+              </div>
+            </div>
+            <!-- Page Category Filter Header End -->
+
+            <!-- Product Category Item List Start -->
+            <div class="product-category-item-list">
+              <!-- Product Category Item Start -->
+              <div
+                class="product-category-item wow fadeInUp"
+                data-wow-delay="0.2s"
+              >
+                <h2 class="product-category-item-title">Categories</h2>
+                <ul>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Herbal_Supplements"
+                      name="category"
+                      value="Herbal_Supplements"
+                    />
+                    <label for="Herbal_Supplements"
+                      >Herbal Supplements (156)</label
+                    >
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Ayurvedic_Remedies"
+                      name="category"
+                      value="Ayurvedic_Remedies"
+                    />
+                    <label for="Ayurvedic_Remedies"
+                      >Ayurvedic Remedies (98)</label
+                    >
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Herbal_Teas"
+                      name="category"
+                      value="Herbal_Teas"
+                    />
+                    <label for="Herbal_Teas">Herbal Teas & Infusions (84)</label
+                    >
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Natural_Skincare"
+                      name="category"
+                      value="Natural_Skincare"
+                    />
+                    <label for="Natural_Skincare">Natural Skincare (112)</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Essential_Oils"
+                      name="category"
+                      value="Essential_Oils"
+                    />
+                    <label for="Essential_Oils">Essential Oils (67)</label>
+                  </li>
+                </ul>
+              </div>
+              <!-- Product Category Item End -->
+
+              <!-- Product Category Item Start -->
+              <div
+                class="product-category-item wow fadeInUp"
+                data-wow-delay="0.4s"
+              >
+                <h2 class="product-category-item-title">Filter by Brands</h2>
+                <ul>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Vaya_Leaf_Organics"
+                      name="category"
+                      value="Vaya_Leaf_Organics"
+                    />
+                    <label for="Vaya_Leaf_Organics">Vaya-Leaf Organics</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Herbal_Roots"
+                      name="category"
+                      value="Herbal_Roots"
+                    />
+                    <label for="Herbal_Roots">Herbal Roots</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Ayurveda_Pure"
+                      name="category"
+                      value="Ayurveda_Pure"
+                    />
+                    <label for="Ayurveda_Pure">Ayurveda Pure</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Botanica_Essentials"
+                      name="category"
+                      value="Botanica_Essentials"
+                    />
+                    <label for="Botanica_Essentials">Botanica Essentials</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="Natures_Harvest"
+                      name="category"
+                      value="Natures_Harvest"
+                    />
+                    <label for="Natures_Harvest">Nature's Harvest</label>
+                  </li>
+                </ul>
+              </div>
+              <!-- Product Category Item End -->
+            </div>
+            <!-- Product Category Item List End -->
+          </div>
+          <!-- Page Single Sidebar End -->
+        </div>
+
+        <div class="col-xl-9 col-lg-8">
+          <!-- Product item List Box Start -->
+          <div class="product-item-list-box">
+            <!-- Product Category Filter Header Start -->
+            <div class="product-category-filter-header wow fadeInUp">
+              <div class="product-category-filter-title">
+                <h2>Show All Results</h2>
+              </div>
+              <div class="product-category-result-info">
+                <div class="product-category-result-pagination">
+                  <ul>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">9</a></li>
+                    <li><a href="#">12</a></li>
+                    <li><a href="#">15</a></li>
+                  </ul>
+                </div>
+                <div class="product-category-sorting-list">
+                  <select
+                    name="sorting_list"
+                    class="form-control form-select"
+                    id="sorting_list"
+                    required
+                  >
+                    <option value="" disabled selected>Default Sorting</option>
+                    <option value="Low_to_High">Low to High</option>
+                    <option value="High_to_Low">High to Low</option>
+                    <option value="Popularity">Popularity</option>
+                    <option value="Best_Sellers">Best Sellers</option>
+                    <option value="Trending">Trending</option>
+                    <option value="Most_Reviewed">Most Reviewed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- Product Category Filter Header End -->
+
+            <!-- Product item List Start -->
+            <div class="product-item-list">
+              <!-- Product Item Start -->
+              <div class="product-item wow fadeInUp">
+                <!-- Product Item Header Start -->
+                <div class="product-item-header">
+                  <!-- Product Item Image Start -->
+                  <div class="product-item-image">
+                    <a href="#">
+                      <figure>
+                        <img src="/images/product-1-img.png" alt="" />
+                      </figure>
+                    </a>
+                  </div>
+                  <!-- Product Item Image End -->
+
+                  <!-- Product Item Action Start -->
+                  <div class="product-item-action">
+                    <ul>
+                      <li>
+                        <a href="#"
+                          ><img
+                            src="/images/icon-wishlist-primary.svg"
+                            alt=""
+                          /></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><img
+                            src="/images/icon-preview-primary.svg"
+                            alt=""
+                          /></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><img src="/images/icon-cart-primary.svg" alt="" /></a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Product Item Action End -->
+                </div>
+                <!-- Product Item Header End -->
+
+                <!-- Product Item Body Start -->
+                <div class="product-item-body">
+                  <!-- Product Item Content Start -->
+                  <div class="product-item-content">
+                    <p class="product-item-category">Immunity</p>
+                    <h2 class="product-item-title">
+                      <a href="#">Moringa Powder</a>
+                    </h2>
+                    <span class="product-item-rating">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <b>(3 Reviews)</b>
+                    </span>
+                  </div>
+                  <!-- Product Item Content End -->
+
+                  <!-- Product Item Price Start -->
+                  <div class="product-item-price">
+                    <h3><span>₹349</span>₹279</h3>
+                  </div>
+                  <!-- Product Item Price End -->
+                </div>
+                <!-- Product Item Body End -->
+              </div>
+              <!-- Product Item End -->
+
+              <!-- Product Item Start -->
+              <div class="product-item wow fadeInUp" data-wow-delay="0.2s">
+                <!-- Product Item Header Start -->
+                <div class="product-item-header">
+                  <!-- Product Item Image Start -->
+                  <div class="product-item-image">
+                    <a href="#">
+                      <figure>
+                        <img src="/images/product-2-img.png" alt="" />
+                      </figure>
+                    </a>
+                  </div>
+                  <!-- Product Item Image End -->
+
+                  <!-- Product Item Action Start -->
+                  <div class="product-item-action">
+                    <ul>
+                      <li>
+                        <a href="#"
+                          ><img
+                            src="/images/icon-wishlist-primary.svg"
+                            alt=""
+                          /></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><img
+                            src="/images/icon-preview-primary.svg"
+                            alt=""
+                          /></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><img src="/images/icon-cart-primary.svg" alt="" /></a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Product Item Action End -->
+                </div>
+                <!-- Product Item Header End -->
+
+                <!-- Product Item Body Start -->
+                <div class="product-item-body">
+                  <!-- Product Item Content Start -->
+                  <div class="product-item-content">
+                    <p class="product-item-category">Wellness</p>
+                    <h2 class="product-item-title">
+                      <a href="#">Moringa Tablates</a>
+                    </h2>
+                    <span class="product-item-rating">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <b>(3 Reviews)</b>
+                    </span>
+                  </div>
+                  <!-- Product Item Content End -->
+
+                  <!-- Product Item Price Start -->
+                  <div class="product-item-price">
+                    <h3><span>₹599</span>₹449</h3>
+                  </div>
+                  <!-- Product Item Price End -->
+                </div>
+                <!-- Product Item Body End -->
+              </div>
+              <!-- Product Item End -->
+            </div>
+            <!-- Product item List End -->
+
+            <!-- Product Leader More Button Start -->
+            <div
+              class="product-learn-more-btn wow fadeInUp"
+              data-wow-delay="0.2s"
+            >
+              <a href="#" class="btn-default">Load More</a>
+            </div>
+            <!-- Product Leader More Button End -->
+          </div>
+          <!-- Product item List Box End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

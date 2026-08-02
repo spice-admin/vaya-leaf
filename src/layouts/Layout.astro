@@ -1,0 +1,86 @@
+---
+import Preloader from "../components/layouts/PreLoader.astro";
+import TopBar from "../components/layouts/TopBar.astro";
+import Header from "../components/layouts/Header.astro";
+import Footer from "../components/layouts/Footer.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width"
+      initial-scale="1.0,"
+      maximum-scale='1"'
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Vaya Leaf Store</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png" />
+    <!-- Google Fonts Css-->
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Css -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <!-- SlickNav Css -->
+    <link href="/css/slicknav.min.css" rel="stylesheet" />
+    <!-- Swiper Css -->
+    <link rel="stylesheet" href="/css/swiper-bundle.min.css" />
+    <!-- Font Awesome Icon Css-->
+    <link href="/css/all.min.css" rel="stylesheet" media="screen" />
+    <!-- Animated Css -->
+    <link href="/css/animate.css" rel="stylesheet" />
+    <!-- Magnific Popup Core Css File -->
+    <link rel="stylesheet" href="/css/magnific-popup.css" />
+    <!-- Mouse Cursor Css File -->
+    <link rel="stylesheet" href="/css/mousecursor.css" />
+    <!-- Main Custom Css -->
+    <link href="/css/custom.css" rel="stylesheet" media="screen" />
+  </head>
+
+  <body>
+    <Preloader />
+    <TopBar />
+    <Header />
+    <slot />
+    <Footer />
+
+    <!-- Jquery Library File -->
+    <script is:inline src="js/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap js file -->
+    <script is:inline src="js/bootstrap.min.js"></script>
+    <!-- Validator js file -->
+    <script is:inline src="js/validator.min.js"></script>
+    <!-- SlickNav js file -->
+    <script is:inline src="js/jquery.slicknav.js"></script>
+    <!-- Swiper js file -->
+    <script is:inline src="js/swiper-bundle.min.js"></script>
+    <!-- Counter js file -->
+    <script is:inline src="js/jquery.waypoints.min.js"></script>
+    <script is:inline src="js/jquery.counterup.min.js"></script>
+    <!-- Magnific js file -->
+    <script is:inline src="js/jquery.magnific-popup.min.js"></script>
+    <!-- SmoothScroll -->
+    <script is:inline src="js/SmoothScroll.js"></script>
+    <!-- Parallax js -->
+    <script is:inline src="js/parallaxie.js"></script>
+    <!-- MagicCursor js file -->
+    <script is:inline src="js/gsap.min.js"></script>
+    <script is:inline src="js/magiccursor.js"></script>
+    <!-- Text Effect js file -->
+    <script is:inline src="js/SplitText.min.js"></script>
+    <script is:inline src="js/ScrollTrigger.min.js"></script>
+    <!-- YTPlayer js File -->
+    <script is:inline src="js/jquery.mb.YTPlayer.min.js"></script>
+    <!-- Wow js file -->
+    <script is:inline src="js/wow.min.js"></script>
+    <!-- Main Custom js file -->
+    <script is:inline src="js/function.js"></script>
+  </body>
+</html>
