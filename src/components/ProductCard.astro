@@ -1,0 +1,72 @@
+---
+import type { ProductSummary } from "../lib/api";
+
+interface Props {
+  product: ProductSummary;
+}
+
+const { product } = Astro.props;
+
+const category = product.categories[0]?.name ?? "";
+const imageSrc = product.image?.src ?? "/images/product-1-img.png";
+const imageAlt = product.image?.alt || product.name;
+const productUrl = `/single-product?slug=${product.slug}`;
+const symbol = product.currency === "INR" ? "₹" : `${product.currency} `;
+const showSale = product.on_sale && product.sale_price !== "";
+---
+
+<div class="product-item wow fadeInUp">
+  <div class="product-item-header">
+    <div class="product-item-image">
+      <a href={productUrl}>
+        <figure><img src={imageSrc} alt={imageAlt} /></figure>
+      </a>
+    </div>
+    <div class="product-item-action">
+      <ul>
+        <li>
+          <a href="#"><img src="/images/icon-wishlist-primary.svg" alt="" /></a>
+        </li>
+        <li>
+          <a href="#"><img src="/images/icon-preview-primary.svg" alt="" /></a>
+        </li>
+        <li>
+          <a href="#"><img src="/images/icon-cart-primary.svg" alt="" /></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="product-item-body">
+    <div class="product-item-content">
+      <p class="product-item-category">{category}</p>
+      <h2 class="product-item-title">
+        <a href={productUrl}>{product.name}</a>
+      </h2>
+      <span class="product-item-rating">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+          class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+          class="fa-solid fa-star"></i>
+        <b>({product.rating_count} Reviews)</b>
+      </span>
+    </div>
+    <div class="product-item-price">
+      {
+        showSale ? (
+          <h3>
+            <span>
+              {symbol}
+              {product.regular_price}
+            </span>
+            {symbol}
+            {product.sale_price}
+          </h3>
+        ) : (
+          <h3>
+            {symbol}
+            {product.price}
+          </h3>
+        )
+      }
+    </div>
+  </div>
+</div>

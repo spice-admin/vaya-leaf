@@ -1,5 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { getProduct, getProducts } from "../lib/api";
+
+export const prerender = false;
+
+const slug = Astro.url.searchParams.get("slug");
+if (!slug) return Astro.redirect("/products");
+
+let product;
+try {
+  product = await getProduct(slug);
+} catch {
+  product = null;
+}
+if (!product) return Astro.redirect("/products");
+
+const category = product.categories[0]?.name ?? "";
+const symbol = product.currency === "INR" ? "₹" : `${product.currency} `;
+const showSale = product.on_sale && product.sale_price !== "";
+const tagNames = product.tags.map((tag) => tag.name).join(", ");
+const related = (await getProducts({ per_page: 5 }))
+  .filter((p) => p.slug !== product.slug)
+  .slice(0, 4);
 ---
 
 <Layout>
@@ -19,10 +42,10 @@ import Layout from "../layouts/Layout.astro";
                     <a href="products.html">Categories</a>
                   </li>
                   <li class="breadcrumb-item">
-                    <a href="products.html">Fresh Groceries</a>
+                    <a href="products.html">{category}</a>
                   </li>
                   <li class="breadcrumb-item active" aria-current="page">
-                    Organic Red Apples
+                    {product.name}
                   </li>
                 </ol>
               </nav>
@@ -36,30 +59,11 @@ import Layout from "../layouts/Layout.astro";
                 <!-- Product Single Image Slider Start -->
                 <div class="swiper product-single-image-slider">
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                      <figure>
-                        <img
-                          src="images/product-thumbnail-image-1.png"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
-                    <div class="swiper-slide">
-                      <figure>
-                        <img
-                          src="images/product-thumbnail-image-2.png"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
-                    <div class="swiper-slide">
-                      <figure>
-                        <img
-                          src="images/product-thumbnail-image-3.png"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
+                    {product.images.map((img) => (
+                      <div class="swiper-slide">
+                        <figure><img src={img.src} alt={img.alt || product.name} /></figure>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <!-- Product Single Image Slider End -->
@@ -67,30 +71,11 @@ import Layout from "../layouts/Layout.astro";
                 <!-- Product Single Image Item Start -->
                 <div class="swiper product-single-image-item">
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                      <figure class="imgae-anime">
-                        <img
-                          src="images/product-thumbnail-image-1.png"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
-                    <div class="swiper-slide">
-                      <figure class="imgae-anime">
-                        <img
-                          src="images/product-thumbnail-image-2.png"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
-                    <div class="swiper-slide">
-                      <figure class="imgae-anime">
-                        <img
-                          src="images/product-thumbnail-image-3.png"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
+                    {product.images.map((img) => (
+                      <div class="swiper-slide">
+                        <figure class="imgae-anime"><img src={img.src} alt={img.alt || product.name} /></figure>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <!-- Product Single Image Item End -->
@@ -101,8 +86,8 @@ import Layout from "../layouts/Layout.astro";
               <div class="product-single-info-content">
                 <!-- Product Single title Start -->
                 <div class="product-single-title wow fadeInUp">
-                  <span>Fresh Fruits</span>
-                  <h1>Organic red apples</h1>
+                  <span>{category}</span>
+                  <h1>{product.name}</h1>
                 </div>
                 <!-- Product Single title End -->
 
@@ -113,28 +98,21 @@ import Layout from "../layouts/Layout.astro";
                   <i class="fa-solid fa-star"></i>
                   <i class="fa-solid fa-star"></i>
                   <i class="fa-solid fa-star"></i>
-                  <b>(3 Reviews)</b>
+                  <b>({product.rating_count} Reviews)</b>
                 </div>
                 <!-- Product Single Rating End -->
 
                 <!-- Product Single Price Start -->
-                <div
-                  class="product-single-price wow fadeInUp"
-                  data-wow-delay="0.2s"
-                >
-                  <h2>$18.00 <sub>$20.00</sub></h2>
+                <div class="product-single-price wow fadeInUp" data-wow-delay="0.2s">
+                  {showSale
+                    ? <h2>{symbol}{product.sale_price} <sub>{symbol}{product.regular_price}</sub></h2>
+                    : <h2>{symbol}{product.price}</h2>}
                 </div>
                 <!-- Product Single Price End -->
 
                 <!-- Product Single Description Start -->
-                <div
-                  class="product-single-description wow fadeInUp"
-                  data-wow-delay="0.2s"
-                >
-                  <p>
-                    Enjoy the natural sweetness and crisp texture of our Organic
-                    Red Apples, freshly harvested from trusted organic farms.
-                  </p>
+                <div class="product-single-description wow fadeInUp" data-wow-delay="0.2s">
+                  <p set:html={product.short_description}></p>
                 </div>
                 <!-- Product Single Description End -->
 
@@ -220,8 +198,8 @@ import Layout from "../layouts/Layout.astro";
                   <!-- Product Single Details Start -->
                   <div class="product-single-details-list">
                     <ul>
-                      <li><span>SKU:</span> FRA-APL-1025</li>
-                      <li><span>Tags:</span> Organic, Fresh Fruits, Apple</li>
+                      <li><span>SKU:</span> {product.sku}</li>
+                      <li><span>Tags:</span> {tagNames}</li>
                     </ul>
                   </div>
                   <!-- Product Single Details End -->
@@ -291,40 +269,7 @@ import Layout from "../layouts/Layout.astro";
                   id="first"
                   role="tabpanel"
                 >
-                  <div class="product-tab-item-content">
-                    <p>
-                      Our Organic Red Apples are freshly harvested from trusted
-                      organic farms to ensure premium quality, crisp texture,
-                      and naturally sweet flavor in every bite. Carefully grown
-                      without harmful chemicals or artificial preservatives,
-                      these apples provide pure freshness and wholesome
-                      nutrition for your everyday lifestyle.
-                    </p>
-                    <p>
-                      Packed with essential vitamins, antioxidants, and dietary
-                      fiber, Organic Red Apples help support overall wellness
-                      and healthy eating habits. Whether enjoyed as a quick
-                      snack, added to salads, blended into smoothies, or used in
-                      homemade desserts, they deliver both flavor and nutrition
-                      with every serving. Their naturally refreshing taste makes
-                      them a favorite choice for families looking for healthier
-                      food options.
-                    </p>
-                    <ul>
-                      <li>
-                        Fresh organic apples packed with natural sweetness,
-                        crisp texture, and healthy daily nutrition.
-                      </li>
-                      <li>
-                        Premium quality organic apples filled with antioxidants,
-                        fiber, and delicious naturally sweet flavor.
-                      </li>
-                      <li>
-                        Farm-fresh apples carefully selected for freshness,
-                        balanced nutrition, and exceptional juicy taste daily.
-                      </li>
-                    </ul>
-                  </div>
+                  <div class="product-tab-item-content" set:html={product.description}></div>
                 </div>
                 <!-- Product Tab Item End -->
 
@@ -532,285 +477,7 @@ import Layout from "../layouts/Layout.astro";
         <div class="col-xl-12">
           <!-- Related Product Item List Start -->
           <div class="related-product-items-list">
-            <!-- Product Item Start -->
-            <div class="product-item wow fadeInUp">
-              <!-- Product Item Header Start -->
-              <div class="product-item-header">
-                <!-- Product Item Image Start -->
-                <div class="product-item-image">
-                  <a href="product-single.html">
-                    <figure>
-                      <img src="images/product-image-1.png" alt="" />
-                    </figure>
-                  </a>
-                </div>
-                <!-- Product Item Image End -->
-
-                <!-- Product Item Action Start -->
-                <div class="product-item-action">
-                  <ul>
-                    <li>
-                      <a href="account-wishlist.html"
-                        ><img
-                          src="images/icon-wishlist-primary.svg"
-                          alt=""
-                        /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="#"
-                        ><img src="images/icon-preview-primary.svg" alt="" /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="cart.html"
-                        ><img src="images/icon-cart-primary.svg" alt="" /></a
-                      >
-                    </li>
-                  </ul>
-                </div>
-                <!-- Product Item Action End -->
-              </div>
-              <!-- Product Item Header End -->
-
-              <!-- Product Item Body Start -->
-              <div class="product-item-body">
-                <!-- Product Item Content Start -->
-                <div class="product-item-content">
-                  <p class="product-item-category">Fruits</p>
-                  <h2 class="product-item-title">
-                    <a href="product-single.html">Organic Red Apples</a>
-                  </h2>
-                  <span class="product-item-rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <b>(3 Reviews)</b>
-                  </span>
-                </div>
-                <!-- Product Item Content End -->
-
-                <!-- Product Item Price Start -->
-                <div class="product-item-price">
-                  <h3><span>$20</span>$18</h3>
-                </div>
-                <!-- Product Item Price End -->
-              </div>
-              <!-- Product Item Body End -->
-            </div>
-            <!-- Product Item End -->
-
-            <!-- Product Item Start -->
-            <div class="product-item wow fadeInUp" data-wow-delay="0.2s">
-              <!-- Product Item Header Start -->
-              <div class="product-item-header">
-                <!-- Product Item Image Start -->
-                <div class="product-item-image">
-                  <a href="product-single.html">
-                    <figure>
-                      <img src="images/product-image-2.png" alt="" />
-                    </figure>
-                  </a>
-                </div>
-                <!-- Product Item Image End -->
-
-                <!-- Product Item Action Start -->
-                <div class="product-item-action">
-                  <ul>
-                    <li>
-                      <a href="account-wishlist.html"
-                        ><img
-                          src="images/icon-wishlist-primary.svg"
-                          alt=""
-                        /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="#"
-                        ><img src="images/icon-preview-primary.svg" alt="" /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="cart.html"
-                        ><img src="images/icon-cart-primary.svg" alt="" /></a
-                      >
-                    </li>
-                  </ul>
-                </div>
-                <!-- Product Item Action End -->
-              </div>
-              <!-- Product Item Header End -->
-
-              <!-- Product Item Body Start -->
-              <div class="product-item-body">
-                <!-- Product Item Content Start -->
-                <div class="product-item-content">
-                  <p class="product-item-category">Fruits</p>
-                  <h2 class="product-item-title">
-                    <a href="product-single.html">Fresh Bananas</a>
-                  </h2>
-                  <span class="product-item-rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <b>(3 Reviews)</b>
-                  </span>
-                </div>
-                <!-- Product Item Content End -->
-
-                <!-- Product Item Price Start -->
-                <div class="product-item-price">
-                  <h3><span>$20</span>$18</h3>
-                </div>
-                <!-- Product Item Price End -->
-              </div>
-              <!-- Product Item Body End -->
-            </div>
-            <!-- Product Item End -->
-
-            <!-- Product Item Start -->
-            <div class="product-item wow fadeInUp" data-wow-delay="0.4s">
-              <!-- Product Item Header Start -->
-              <div class="product-item-header">
-                <!-- Product Item Image Start -->
-                <div class="product-item-image">
-                  <a href="product-single.html">
-                    <figure>
-                      <img src="images/product-image-3.png" alt="" />
-                    </figure>
-                  </a>
-                </div>
-                <!-- Product Item Image End -->
-
-                <!-- Product Item Action Start -->
-                <div class="product-item-action">
-                  <ul>
-                    <li>
-                      <a href="account-wishlist.html"
-                        ><img
-                          src="images/icon-wishlist-primary.svg"
-                          alt=""
-                        /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="#"
-                        ><img src="images/icon-preview-primary.svg" alt="" /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="cart.html"
-                        ><img src="images/icon-cart-primary.svg" alt="" /></a
-                      >
-                    </li>
-                  </ul>
-                </div>
-                <!-- Product Item Action End -->
-              </div>
-              <!-- Product Item Header End -->
-
-              <!-- Product Item Body Start -->
-              <div class="product-item-body">
-                <!-- Product Item Content Start -->
-                <div class="product-item-content">
-                  <p class="product-item-category">Dairy</p>
-                  <h2 class="product-item-title">
-                    <a href="product-single.html">Farm Fresh Milk</a>
-                  </h2>
-                  <span class="product-item-rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <b>(3 Reviews)</b>
-                  </span>
-                </div>
-                <!-- Product Item Content End -->
-
-                <!-- Product Item Price Start -->
-                <div class="product-item-price">
-                  <h3><span>$20</span>$18</h3>
-                </div>
-                <!-- Product Item Price End -->
-              </div>
-              <!-- Product Item Body End -->
-            </div>
-            <!-- Product Item End -->
-
-            <!-- Product Item Start -->
-            <div class="product-item wow fadeInUp" data-wow-delay="0.6s">
-              <!-- Product Item Header Start -->
-              <div class="product-item-header">
-                <!-- Product Item Image Start -->
-                <div class="product-item-image">
-                  <a href="product-single.html">
-                    <figure>
-                      <img src="images/product-image-4.png" alt="" />
-                    </figure>
-                  </a>
-                </div>
-                <!-- Product Item Image End -->
-
-                <!-- Product Item Action Start -->
-                <div class="product-item-action">
-                  <ul>
-                    <li>
-                      <a href="account-wishlist.html"
-                        ><img
-                          src="images/icon-wishlist-primary.svg"
-                          alt=""
-                        /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="#"
-                        ><img src="images/icon-preview-primary.svg" alt="" /></a
-                      >
-                    </li>
-                    <li>
-                      <a href="cart.html"
-                        ><img src="images/icon-cart-primary.svg" alt="" /></a
-                      >
-                    </li>
-                  </ul>
-                </div>
-                <!-- Product Item Action End -->
-              </div>
-              <!-- Product Item Header End -->
-
-              <!-- Product Item Body Start -->
-              <div class="product-item-body">
-                <!-- Product Item Content Start -->
-                <div class="product-item-content">
-                  <p class="product-item-category">Bakery</p>
-                  <h2 class="product-item-title">
-                    <a href="product-single.html">Whole Wheat Bread</a>
-                  </h2>
-                  <span class="product-item-rating">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <b>(3 Reviews)</b>
-                  </span>
-                </div>
-                <!-- Product Item Content End -->
-
-                <!-- Product Item Price Start -->
-                <div class="product-item-price">
-                  <h3><span>$20</span>$18</h3>
-                </div>
-                <!-- Product Item Price End -->
-              </div>
-              <!-- Product Item Body End -->
-            </div>
-            <!-- Product Item End -->
+            {related.map((p) => <ProductCard product={p} />)}
           </div>
           <!-- Related Product Item List End -->
         </div>
