@@ -1,3 +1,15 @@
+---
+import ProductCard from "../ProductCard.astro";
+import { getProducts, type ProductSummary } from "../../lib/api";
+
+let products: ProductSummary[] = [];
+try {
+  products = await getProducts({ per_page: 8 });
+} catch {
+  products = [];
+}
+---
+
 <div class="our-products">
   <div class="container">
     <div class="row section-row align-items-end">
@@ -26,7 +38,7 @@
 
           <!-- Section Button Start -->
           <div class="section-btn wow fadeInUp" data-wow-delay="0.4s">
-            <a class="btn-default" href="products.html">View All Products</a>
+            <a class="btn-default" href="/products">View All Products</a>
           </div>
           <!-- Section Button End -->
         </div>
@@ -40,171 +52,13 @@
         <div class="product-slider">
           <div class="swiper">
             <div class="swiper-wrapper">
-              <!-- Product Slide Start -->
-              <div class="swiper-slide">
-                <!-- Product Item Start -->
-                <div class="product-item">
-                  <!-- Product Item Header Start -->
-                  <div class="product-item-header">
-                    <!-- Product Item Image Start -->
-                    <div class="product-item-image">
-                      <a href="product-single.html">
-                        <figure>
-                          <img
-                            src="/images/product-2-img.png"
-                            alt="Organic Ashwagandha Powder"
-                          />
-                        </figure>
-                      </a>
-                    </div>
-                    <!-- Product Item Image End -->
-
-                    <!-- Product Item Action Start -->
-                    <div class="product-item-action">
-                      <ul>
-                        <li>
-                          <a href="account-wishlist.html"
-                            ><img
-                              src="/images/icon-wishlist-primary.svg"
-                              alt="Add to wishlist"
-                            /></a
-                          >
-                        </li>
-                        <li>
-                          <a href="#"
-                            ><img
-                              src="/images/icon-preview-primary.svg"
-                              alt="Quick preview"
-                            /></a
-                          >
-                        </li>
-                        <li>
-                          <a href="cart.html"
-                            ><img
-                              src="/images/icon-cart-primary.svg"
-                              alt="Add to cart"
-                            /></a
-                          >
-                        </li>
-                      </ul>
-                    </div>
-                    <!-- Product Item Action End -->
+              {
+                products.map((product) => (
+                  <div class="swiper-slide">
+                    <ProductCard product={product} />
                   </div>
-                  <!-- Product Item Header End -->
-
-                  <!-- Product Item Body Start -->
-                  <div class="product-item-body">
-                    <!-- Product Item Content Start -->
-                    <div class="product-item-content">
-                      <p class="product-item-category">Wellness</p>
-                      <h2 class="product-item-title">
-                        <a href="product-single.html">Moringa Tablets</a>
-                      </h2>
-                      <span class="product-item-rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <b>(128 Reviews)</b>
-                      </span>
-                    </div>
-                    <!-- Product Item Content End -->
-
-                    <!-- Product Item Price Start -->
-                    <div class="product-item-price">
-                      <h3><span>₹599</span>₹449</h3>
-                    </div>
-                    <!-- Product Item Price End -->
-                  </div>
-                  <!-- Product Item Body End -->
-                </div>
-                <!-- Product Item End -->
-              </div>
-              <!-- Product Slide End -->
-
-              <!-- Product Slide Start -->
-              <div class="swiper-slide">
-                <!-- Product Item Start -->
-                <div class="product-item">
-                  <!-- Product Item Header Start -->
-                  <div class="product-item-header">
-                    <!-- Product Item Image Start -->
-                    <div class="product-item-image">
-                      <a href="product-single.html">
-                        <figure>
-                          <img
-                            src="/images/product-1-img.png"
-                            alt="Pure Tulsi Drops"
-                          />
-                        </figure>
-                      </a>
-                    </div>
-                    <!-- Product Item Image End -->
-
-                    <!-- Product Item Action Start -->
-                    <div class="product-item-action">
-                      <ul>
-                        <li>
-                          <a href="account-wishlist.html"
-                            ><img
-                              src="/images/icon-wishlist-primary.svg"
-                              alt="Add to wishlist"
-                            /></a
-                          >
-                        </li>
-                        <li>
-                          <a href="#"
-                            ><img
-                              src="/images/icon-preview-primary.svg"
-                              alt="Quick preview"
-                            /></a
-                          >
-                        </li>
-                        <li>
-                          <a href="cart.html"
-                            ><img
-                              src="/images/icon-cart-primary.svg"
-                              alt="Add to cart"
-                            /></a
-                          >
-                        </li>
-                      </ul>
-                    </div>
-                    <!-- Product Item Action End -->
-                  </div>
-                  <!-- Product Item Header End -->
-
-                  <!-- Product Item Body Start -->
-                  <div class="product-item-body">
-                    <!-- Product Item Content Start -->
-                    <div class="product-item-content">
-                      <p class="product-item-category">Immunity</p>
-                      <h2 class="product-item-title">
-                        <a href="product-single.html">Moringa Powder</a>
-                      </h2>
-                      <span class="product-item-rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <b>(96 Reviews)</b>
-                      </span>
-                    </div>
-                    <!-- Product Item Content End -->
-
-                    <!-- Product Item Price Start -->
-                    <div class="product-item-price">
-                      <h3><span>₹349</span>₹279</h3>
-                    </div>
-                    <!-- Product Item Price End -->
-                  </div>
-                  <!-- Product Item Body End -->
-                </div>
-                <!-- Product Item End -->
-              </div>
-              <!-- Product Slide End -->
+                ))
+              }
             </div>
             <div class="product-pagination"></div>
           </div>

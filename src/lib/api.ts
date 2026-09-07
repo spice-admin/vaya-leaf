@@ -39,8 +39,15 @@ export async function getProducts(
   return res.json();
 }
 
-export interface ProductTag { id: number; name: string; slug: string; }
-export interface ProductAttribute { name: string; options: string[]; }
+export interface ProductTag {
+  id: number;
+  name: string;
+  slug: string;
+}
+export interface ProductAttribute {
+  name: string;
+  options: string[];
+}
 
 export interface ProductDetail extends Omit<ProductSummary, "image"> {
   sku: string;
@@ -51,9 +58,24 @@ export interface ProductDetail extends Omit<ProductSummary, "image"> {
   attributes: ProductAttribute[];
 }
 
+export interface CategoryListItem {
+  id: number;
+  name: string;
+  slug: string;
+  parent: number;
+  count: number;
+  image: ProductImage | null;
+}
+
 export async function getProduct(slug: string): Promise<ProductDetail | null> {
   const res = await fetch(`${API_BASE}/products/${encodeURIComponent(slug)}`);
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Product fetch failed: ${res.status}`);
+  return res.json();
+}
+
+export async function getCategories(): Promise<CategoryListItem[]> {
+  const res = await fetch(`${API_BASE}/categories`);
+  if (!res.ok) throw new Error(`Categories fetch failed: ${res.status}`);
   return res.json();
 }

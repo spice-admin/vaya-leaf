@@ -615,7 +615,7 @@ header.main-header .container {
   font-size: 16px;
   font-weight: 400;
   line-height: 1.25em;
-  color: var(--primary-color);
+  color: white;
   background: transparent;
   border: none;
   border-radius: 0;
@@ -638,7 +638,7 @@ header.main-header .container {
 
 .header-search-form .form-group .header-search-btn i {
   font-size: 20px;
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .header-action-details {
@@ -777,7 +777,7 @@ header.main-header .container {
   font-weight: 600;
   line-height: normal;
   padding: 9px 0px !important;
-  color: white;
+  color: var(--secondary-color);
   background: transparent;
   border-radius: 0px;
   text-transform: capitalize;

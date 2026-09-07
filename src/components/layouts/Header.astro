@@ -1,5 +1,5 @@
 ---
-
+const searchQuery = Astro.url.searchParams.get("search") ?? "";
 ---
 
 <header class="main-header">
@@ -13,20 +13,20 @@
         <!-- Logo End -->
 
         <!-- Header Search Form Box Start -->
-        <!-- <div class="header-search-form-box">
-          
+        <div class="header-search-form-box">
           <form
             class="header-search-form"
             id="headerForm"
-            action="#"
-            method="POST"
+            action="/products"
+            method="get"
           >
             <div class="form-group">
               <input
                 type="text"
-                name="product"
+                name="search"
                 class="form-control"
                 placeholder="Search By Products..."
+                value={searchQuery}
                 required
               />
               <button type="submit" class="header-search-btn"
@@ -34,8 +34,7 @@
               >
             </div>
           </form>
-          
-        </div> -->
+        </div>
         <!-- Header Search Form Box End -->
 
         <!-- Header Action Details Start -->

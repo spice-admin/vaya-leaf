@@ -1,16 +1,31 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProductCard from "../components/ProductCard.astro";
-import { getProducts, type ProductSummary } from "../lib/api";
+import {
+  getProducts,
+  getCategories,
+  type ProductSummary,
+  type CategoryListItem,
+} from "../lib/api";
 
 export const prerender = false;
 
 const search = Astro.url.searchParams.get("search") ?? undefined;
+const categoryParam = Astro.url.searchParams.get("category");
+const activeCategory = categoryParam ? Number(categoryParam) : undefined;
 
 let products: ProductSummary[] = [];
+let categories: CategoryListItem[] = [];
 let loadError = false;
 try {
-  products = await getProducts({ per_page: 12, ...(search ? { search } : {}) });
+  [products, categories] = await Promise.all([
+    getProducts({
+      per_page: 12,
+      ...(search ? { search } : {}),
+      ...(activeCategory ? { category: activeCategory } : {}),
+    }),
+    getCategories(),
+  ]);
 } catch {
   loadError = true;
 }
@@ -59,62 +74,24 @@ try {
               >
                 <h2 class="product-category-item-title">Categories</h2>
                 <ul>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="Herbal_Supplements"
-                      name="category"
-                      value="Herbal_Supplements"
-                    />
-                    <label for="Herbal_Supplements"
-                      >Herbal Supplements (156)</label
-                    >
+                  <li class={activeCategory === undefined ? "active" : ""}>
+                    <a href="/products">All Products</a>
                   </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="Ayurvedic_Remedies"
-                      name="category"
-                      value="Ayurvedic_Remedies"
-                    />
-                    <label for="Ayurvedic_Remedies"
-                      >Ayurvedic Remedies (98)</label
-                    >
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="Herbal_Teas"
-                      name="category"
-                      value="Herbal_Teas"
-                    />
-                    <label for="Herbal_Teas">Herbal Teas & Infusions (84)</label
-                    >
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="Natural_Skincare"
-                      name="category"
-                      value="Natural_Skincare"
-                    />
-                    <label for="Natural_Skincare">Natural Skincare (112)</label>
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="Essential_Oils"
-                      name="category"
-                      value="Essential_Oils"
-                    />
-                    <label for="Essential_Oils">Essential Oils (67)</label>
-                  </li>
+                  {
+                    categories.map((cat) => (
+                      <li class={activeCategory === cat.id ? "active" : ""}>
+                        <a href={`/products?category=${cat.id}`}>
+                          {cat.name} ({cat.count})
+                        </a>
+                      </li>
+                    ))
+                  }
                 </ul>
               </div>
               <!-- Product Category Item End -->
 
               <!-- Product Category Item Start -->
-              <div
+              <!-- <div
                 class="product-category-item wow fadeInUp"
                 data-wow-delay="0.4s"
               >
@@ -166,7 +143,7 @@ try {
                     <label for="Natures_Harvest">Nature's Harvest</label>
                   </li>
                 </ul>
-              </div>
+              </div> -->
               <!-- Product Category Item End -->
             </div>
             <!-- Product Category Item List End -->
@@ -238,3 +215,18 @@ try {
     </div>
   </div>
 </Layout>
+
+<style>
+  .product-category-item ul li a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .product-category-item ul li a:hover,
+  .product-category-item ul li.active a {
+    color: #84c225; /* your brand green — tweak to match exactly */
+  }
+  .product-category-item ul li.active a {
+    font-weight: 700;
+  }
+</style>
