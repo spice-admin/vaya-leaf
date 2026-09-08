@@ -59,11 +59,15 @@ const related = (await getProducts({ per_page: 5 }))
                 <!-- Product Single Image Slider Start -->
                 <div class="swiper product-single-image-slider">
                   <div class="swiper-wrapper">
-                    {product.images.map((img) => (
-                      <div class="swiper-slide">
-                        <figure><img src={img.src} alt={img.alt || product.name} /></figure>
-                      </div>
-                    ))}
+                    {
+                      product.images.map((img) => (
+                        <div class="swiper-slide">
+                          <figure>
+                            <img src={img.src} alt={img.alt || product.name} />
+                          </figure>
+                        </div>
+                      ))
+                    }
                   </div>
                 </div>
                 <!-- Product Single Image Slider End -->
@@ -71,11 +75,15 @@ const related = (await getProducts({ per_page: 5 }))
                 <!-- Product Single Image Item Start -->
                 <div class="swiper product-single-image-item">
                   <div class="swiper-wrapper">
-                    {product.images.map((img) => (
-                      <div class="swiper-slide">
-                        <figure class="imgae-anime"><img src={img.src} alt={img.alt || product.name} /></figure>
-                      </div>
-                    ))}
+                    {
+                      product.images.map((img) => (
+                        <div class="swiper-slide">
+                          <figure class="imgae-anime">
+                            <img src={img.src} alt={img.alt || product.name} />
+                          </figure>
+                        </div>
+                      ))
+                    }
                   </div>
                 </div>
                 <!-- Product Single Image Item End -->
@@ -103,16 +111,36 @@ const related = (await getProducts({ per_page: 5 }))
                 <!-- Product Single Rating End -->
 
                 <!-- Product Single Price Start -->
-                <div class="product-single-price wow fadeInUp" data-wow-delay="0.2s">
-                  {showSale
-                    ? <h2>{symbol}{product.sale_price} <sub>{symbol}{product.regular_price}</sub></h2>
-                    : <h2>{symbol}{product.price}</h2>}
+                <div
+                  class="product-single-price wow fadeInUp"
+                  data-wow-delay="0.2s"
+                >
+                  {
+                    showSale ? (
+                      <h2>
+                        {symbol}
+                        {product.sale_price}{" "}
+                        <sub>
+                          {symbol}
+                          {product.regular_price}
+                        </sub>
+                      </h2>
+                    ) : (
+                      <h2>
+                        {symbol}
+                        {product.price}
+                      </h2>
+                    )
+                  }
                 </div>
                 <!-- Product Single Price End -->
 
                 <!-- Product Single Description Start -->
-                <div class="product-single-description wow fadeInUp" data-wow-delay="0.2s">
-                  <p set:html={product.short_description}></p>
+                <div
+                  class="product-single-description wow fadeInUp"
+                  data-wow-delay="0.2s"
+                >
+                  <p set:html={product.short_description} />
                 </div>
                 <!-- Product Single Description End -->
 
@@ -172,7 +200,12 @@ const related = (await getProducts({ per_page: 5 }))
                   </div>
 
                   <div class="product-single-content-btn">
-                    <a href="cart.html" class="btn-default">Add To cart</a>
+                    <button
+                      type="button"
+                      class="btn-default"
+                      id="addToCartBtn"
+                      data-product-id={product.id}>Add To cart</button
+                    >
                   </div>
 
                   <div class="product-single-action">
@@ -269,7 +302,10 @@ const related = (await getProducts({ per_page: 5 }))
                   id="first"
                   role="tabpanel"
                 >
-                  <div class="product-tab-item-content" set:html={product.description}></div>
+                  <div
+                    class="product-tab-item-content"
+                    set:html={product.description}
+                  />
                 </div>
                 <!-- Product Tab Item End -->
 
@@ -486,3 +522,27 @@ const related = (await getProducts({ per_page: 5 }))
   </div>
   <!-- Related Products Section End -->
 </Layout>
+
+<script>
+  import { addToCart } from "../lib/cart";
+
+  const btn = document.getElementById("addToCartBtn");
+  const qtyInput = document.querySelector<HTMLInputElement>(".qty-input");
+
+  btn?.addEventListener("click", async () => {
+    const productId = Number((btn as HTMLElement).dataset.productId);
+    const quantity = Math.max(1, parseInt(qtyInput?.value || "1", 10) || 1);
+    const original = btn.textContent;
+    btn.textContent = "Adding...";
+    try {
+      await addToCart(productId, quantity);
+      btn.textContent = "Added ✓";
+      window.dispatchEvent(new CustomEvent("cart:updated"));
+    } catch {
+      btn.textContent = "Error";
+    }
+    setTimeout(() => {
+      btn.textContent = original;
+    }, 1500);
+  });
+</script>
