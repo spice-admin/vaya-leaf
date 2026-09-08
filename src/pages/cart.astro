@@ -49,7 +49,9 @@ import Layout from "../layouts/Layout.astro";
                 </p>
               </div>
               <div class="order-checkout-button">
-                <a href="/checkout" class="btn-default">Proceed to Checkout</a>
+                <a href="#" id="checkoutBtn" class="btn-default"
+                  >Proceed to Checkout</a
+                >
               </div>
             </div>
           </div>
@@ -95,6 +97,7 @@ import Layout from "../layouts/Layout.astro";
     updateCartItem,
     removeCartItem,
     clearCart,
+    checkout,
   } from "../lib/cart";
 
   const itemsEl = document.getElementById("cart-items");
@@ -163,6 +166,29 @@ import Layout from "../layouts/Layout.astro";
         render(await clearCart());
       } catch {
         /* ignore */
+      }
+      return;
+    }
+
+    // Proceed to checkout → hand off to WooCommerce native checkout
+    const checkoutBtn = (e.target as HTMLElement).closest(
+      "#checkoutBtn",
+    ) as HTMLAnchorElement | null;
+    if (checkoutBtn) {
+      e.preventDefault();
+      checkoutBtn.style.pointerEvents = "none";
+      const original = checkoutBtn.textContent;
+      checkoutBtn.textContent = "Redirecting…";
+      try {
+        window.location.href = await checkout();
+      } catch {
+        checkoutBtn.style.pointerEvents = "";
+        checkoutBtn.textContent = original;
+        if (subtotalEl)
+          subtotalEl.insertAdjacentHTML(
+            "afterend",
+            `<p class="order-summary-note" style="color:#c0392b">Couldn't start checkout — your cart may be empty.</p>`,
+          );
       }
       return;
     }

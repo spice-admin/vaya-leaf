@@ -57,3 +57,8 @@ export function removeCartItem(productId: number) {
 export function clearCart() {
   return request("/cart", { method: "DELETE" });
 }
+
+export async function checkout(): Promise<string> {
+  const res = await request("/cart/checkout", { method: "POST" });
+  return res.checkout_url as string;
+}
